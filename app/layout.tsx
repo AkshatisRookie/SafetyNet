@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { MapProvider } from "@/components/map-provider"
 import "./globals.css"
 
+
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
@@ -28,6 +29,3 @@ export default function RootLayout({
   )
 }
 
-
-
-import './globals.css'
