@@ -1,6 +1,6 @@
 "use client"
- // client side code define karta taaki login page pe jo bhi hoga usme eventlisteners hooks etc work kar payye
- // wrna by default nextjs jo krta hai usme work nahi karega
+// This directive tells Next.js that this is a client-side component
+// Client-side components can use browser APIs, event listeners, and React hooks
 
 import type React from "react"
 import { useState } from "react"
@@ -12,27 +12,62 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Icons } from "@/components/icons"
 import Link from "next/link"
-// backend code
+// Import Firebase authentication and Firestore functions
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { doc, getDoc } from "firebase/firestore"
+import { auth, db } from "@/server/database/firebase"
+
 export default function LoginPage() {
+  // Initialize router for navigation
   const router = useRouter()
+  // State for loading spinner
   const [isLoading, setIsLoading] = useState(false)
-  const [userType, setUserType] = useState("citizen") //by default citizen login page open hoga
+  // State for user type (citizen or law-enforcement)
+  const [userType, setUserType] = useState("citizen")
+  // State for error messages
+  const [error, setError] = useState("")
 
+  // Handle form submission
   async function onSubmit(event: React.FormEvent) {
+    // Prevent default form submission
     event.preventDefault()
+    // Show loading spinner
     setIsLoading(true)
+    // Clear any previous errors
+    setError("")
 
-    // Simulate authentication
-    setTimeout(() => {
-      setIsLoading(false)
+    // Get form values using getElementById
+    const email = (document.getElementById("email") as HTMLInputElement).value
+    const password = (document.getElementById("password") as HTMLInputElement).value
+
+    try {
+      // Sign in user with email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      
+      // Get user data from Firestore
+      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid))
+      const userData = userDoc.data()
+
+      // Check if user type matches the selected type
+      if (userData?.userType !== userType) {
+        setError("Invalid account type")
+        setIsLoading(false)
+        return
+      }
+
+      // Redirect based on user type
       if (userType === "citizen") {
         router.push("/dashboard")
       } else {
         router.push("/law-enforcement")
       }
-    }, 1500)
+    } catch (error: any) {
+      console.error("Login error:", error)
+      setError("Invalid email or password")
+      setIsLoading(false)
+    }
   }
- // frontend code- requiried used to make sure all fields are filled
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/50 px-4">
       <Card className="w-full max-w-md">
@@ -42,14 +77,23 @@ export default function LoginPage() {
         </CardHeader>
         <form onSubmit={onSubmit}>
           <CardContent className="space-y-4">
+            {/* Display error message if any */}
+            {error && (
+              <div className="text-red-500 text-sm text-center">
+                {error}
+              </div>
+            )}
+            {/* Email input field */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="name@example.com" required />
             </div>
+            {/* Password input field */}
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
+            {/* User type selection */}
             <div className="space-y-2">
               <Label>Account Type</Label>
               <RadioGroup defaultValue="citizen" onValueChange={setUserType} className="flex flex-col space-y-1">
@@ -69,10 +113,12 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
+            {/* Submit button with loading state */}
             <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Sign In
             </Button>
+            {/* Link to registration page */}
             <div className="mt-4 text-center text-sm">
               Don't have an account?{"  "}  
               <Link href="/register" className="underline underline-offset-4 hover:text-primary">
