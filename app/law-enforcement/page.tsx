@@ -224,7 +224,6 @@ export default function LawEnforcementPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">42</div>
-                      <p className="text-xs text-muted-foreground">+8 since last week</p>
                     </CardContent>
                   </Card>
                   <Card>
@@ -234,7 +233,6 @@ export default function LawEnforcementPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">128</div>
-                      <p className="text-xs text-muted-foreground">+32 since last month</p>
                     </CardContent>
                   </Card>
                   <Card>
@@ -244,7 +242,6 @@ export default function LawEnforcementPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">3</div>
-                      <p className="text-xs text-muted-foreground">-2 from yesterday</p>
                     </CardContent>
                   </Card>
                 </div>

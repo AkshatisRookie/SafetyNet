@@ -1,5 +1,5 @@
 "use client"
-
+import 'leaflet/dist/leaflet.css';
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,9 +8,11 @@ import { Label } from "@/components/ui/label"
 import { CrimeMap } from "@/components/crime-map"
 import { CrimeFilters } from "@/components/crime-filters"
 
+
 export default function MapPage() {
   const [crimeType, setCrimeType] = useState("all")
   const [timeRange, setTimeRange] = useState("30")
+
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">

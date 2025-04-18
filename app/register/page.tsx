@@ -14,8 +14,11 @@ import { Icons } from "@/components/icons"
 import Link from "next/link"
 // Import Firebase authentication and Firestore functions
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { doc, setDoc } from "firebase/firestore"
-import { auth, db } from "@/server/database/firebase"
+import { auth } from "@/server/database/firebase"
+import { getFirestore, doc, setDoc } from "firebase/firestore"
+
+// Initialize Firestore
+const db = getFirestore()
 
 export default function RegisterPage() {
   // Initialize router for navigation
@@ -29,22 +32,19 @@ export default function RegisterPage() {
 
   // Handle form submission
   async function onSubmit(event: React.FormEvent) {
-    // Prevent default form submission
     event.preventDefault()
-    // Show loading spinner
     setIsLoading(true)
-    // Clear any previous errors
     setError("")
 
-    // Get form values using getElementById
     const email = (document.getElementById("email") as HTMLInputElement).value
     const password = (document.getElementById("password") as HTMLInputElement).value
     const confirmPassword = (document.getElementById("confirm-password") as HTMLInputElement).value
     const firstName = (document.getElementById("first-name") as HTMLInputElement).value
     const lastName = (document.getElementById("last-name") as HTMLInputElement).value
-    // Only get badge number if user type is law-enforcement
-    const badgeNumber = userType === "law-enforcement" ? (document.getElementById("badge-number") as HTMLInputElement).value : null
-
+    let badgeNumber=null;
+    if (userType=="law-enforcement"){
+      const badgeNumber=(document.getElementById("badge-number") as HTMLInputElement).value
+    }
     // Validate password match
     if (password !== confirmPassword) {
       setError("Passwords do not match")
@@ -70,10 +70,15 @@ export default function RegisterPage() {
       router.push("/login")
     } catch (error: any) {
       console.error("Registration error:", error)
-      // Handle registration errors
-      setError(error.message)
+      // Handle specific Firebase errors
+      if (error.code === "auth/email-already-in-use") {
+        setError("This email is already registered")
+      } else if (error.code === "auth/weak-password") {
+        setError("Password should be at least 6 characters")
+      } else {
+        setError(error.message)
+      }
     } finally {
-      // Hide loading spinner
       setIsLoading(false)
     }
   }

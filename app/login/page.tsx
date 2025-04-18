@@ -14,8 +14,11 @@ import { Icons } from "@/components/icons"
 import Link from "next/link"
 // Import Firebase authentication and Firestore functions
 import { signInWithEmailAndPassword } from "firebase/auth"
-import { doc, getDoc } from "firebase/firestore"
-import { auth, db } from "@/server/database/firebase"
+import { auth } from "@/server/database/firebase"
+import { getFirestore, doc, getDoc } from "firebase/firestore"
+
+// Initialize Firestore
+const db = getFirestore()
 
 export default function LoginPage() {
   // Initialize router for navigation
@@ -29,32 +32,24 @@ export default function LoginPage() {
 
   // Handle form submission
   async function onSubmit(event: React.FormEvent) {
-    // Prevent default form submission
     event.preventDefault()
-    // Show loading spinner
     setIsLoading(true)
-    // Clear any previous errors
     setError("")
 
-    // Get form values using getElementById
     const email = (document.getElementById("email") as HTMLInputElement).value
     const password = (document.getElementById("password") as HTMLInputElement).value
 
     try {
-      // Sign in user with email and password
+      // Sign in the user
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       
       // Get user data from Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid))
       const userData = userDoc.data()
 
-      // Check if user type matches the selected type
-      if (userData?.userType !== userType) {
-        setError("Invalid account type")
-        setIsLoading(false)
-        return
+      if (!userData) {
+        throw new Error("User data not found")
       }
-
       // Redirect based on user type
       if (userType === "citizen") {
         router.push("/dashboard")

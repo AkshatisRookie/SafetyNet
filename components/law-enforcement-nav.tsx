@@ -16,36 +16,6 @@ export function LawEnforcementNav() {
       icon: <Icons.logo className="mr-2 h-4 w-4" />,
       active: pathname === "/law-enforcement",
     },
-    {
-      href: "/law-enforcement/reports",
-      label: "Reports",
-      icon: <Icons.alert className="mr-2 h-4 w-4" />,
-      active: pathname === "/law-enforcement/reports",
-    },
-    {
-      href: "/law-enforcement/map",
-      label: "Crime Map",
-      icon: <Icons.mapPin className="mr-2 h-4 w-4" />,
-      active: pathname === "/law-enforcement/map",
-    },
-    {
-      href: "/law-enforcement/analytics",
-      label: "Analytics",
-      icon: <Icons.settings className="mr-2 h-4 w-4" />,
-      active: pathname === "/law-enforcement/analytics",
-    },
-    {
-      href: "/law-enforcement/sos",
-      label: "SOS Alerts",
-      icon: <Icons.siren className="mr-2 h-4 w-4" />,
-      active: pathname === "/law-enforcement/sos",
-    },
-    {
-      href: "/law-enforcement/settings",
-      label: "Settings",
-      icon: <Icons.settings className="mr-2 h-4 w-4" />,
-      active: pathname === "/law-enforcement/settings",
-    },
   ]
 
   return (

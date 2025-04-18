@@ -33,19 +33,7 @@ export function DashboardNav() {
       label: "Notifications",
       icon: <Icons.notification className="mr-2 h-4 w-4" />,
       active: pathname === "/dashboard/notifications",
-    },
-    {
-      href: "/dashboard/settings",
-      label: "Settings",
-      icon: <Icons.settings className="mr-2 h-4 w-4" />,
-      active: pathname === "/dashboard/settings",
-    },
-    {
-      href: "/dashboard/settings/map-config",
-      label: "Map Configuration",
-      icon: <Icons.map className="mr-2 h-4 w-4" />,
-      active: pathname === "/dashboard/settings/map-config",
-    },
+    }
   ]
 
   return (

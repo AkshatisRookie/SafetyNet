@@ -32,8 +32,8 @@ export default function Home() {
               <p>Easily report crimes and incidents in your area with detailed information.</p>
             </div>
             <div className="p-6 border rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">View Crime Heatmaps</h3>
-              <p>See where incidents are occurring with interactive heatmaps to stay informed.</p>
+              <h3 className="text-xl font-semibold mb-3">View Crime on Maps</h3>
+              <p>See where incidents are occurring and to stay safe.</p>
             </div>
             <div className="p-6 border rounded-lg">
               <h3 className="text-xl font-semibold mb-3">Emergency SOS</h3>
